@@ -27,15 +27,41 @@ export default class App extends Component {
       this.setState({inventory: res.data})
     )
     .catch(error => console.log(error))
-  }
+  };
 
-  addProduct = (productName, price, image) =>{
-    axios.post('/api/product', {productName,price,image})
+  addProduct = (name,price,image) =>{
+
+    let newProduct = {productName: name, price: price, image: image}
+
+
+    axios.post('/api/product', newProduct)
     .then(res =>{
       this.setState({inventory: res.data})
     })
     .catch(error => console.log(error)) 
-  }
+  };
+
+
+  editProduct = (id,name,price,image) => {
+
+    let editProduct = {productName: name, price: price, image: image}
+
+
+
+    
+
+    axios.put(`/api/product/${id}`, editProduct)
+    .then(res => {this.setState({inventory: res.data})})
+    .catch(error => console.log(error))
+
+  };
+
+  deleteProduct = (id) => {
+    axios.delete(`/api/product/${id}`)
+    .then( () => this.componentDidMount())
+    .catch(error => console.log(error))
+
+  };
 
 
 
@@ -46,8 +72,8 @@ export default class App extends Component {
       <div>
         <div>
           <Header/>
-          <Dashboard inventory={this.state.inventory}/>
-          <Form addProductFn={this.addProduct} />
+          <Dashboard inventory={this.state.inventory} deleteFn={this.deleteProduct}/>
+          <Form addProductFn={this.addProduct} editProductFn={this.editProduct}/>
         </div>
       </div>
     )
