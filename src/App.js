@@ -11,7 +11,8 @@ export default class App extends Component {
     super(props)
 
     this.state = {
-      inventory: []
+      inventory: [],
+      storeId: []
 
     }
   };
@@ -46,10 +47,6 @@ export default class App extends Component {
 
     let editProduct = {productName: name, price: price, image: image}
 
-
-
-    
-
     axios.put(`/api/product/${id}`, editProduct)
     .then(res => {this.setState({inventory: res.data})})
     .catch(error => console.log(error))
@@ -73,7 +70,7 @@ export default class App extends Component {
         <div>
           <Header/>
           <Dashboard inventory={this.state.inventory} deleteFn={this.deleteProduct}/>
-          <Form addProductFn={this.addProduct} editProductFn={this.editProduct}/>
+          <Form addProductFn={this.addProduct} editProductFn={this.editProduct} storeId={this.state.storeId}/>
         </div>
       </div>
     )
