@@ -21,7 +21,9 @@ export default class App extends Component {
 
   componentDidMount = () => {
     this.getProducts()
-  }
+  };
+
+
 
 
   getProducts = () =>{
@@ -31,6 +33,8 @@ export default class App extends Component {
     )
     .catch(error => console.log(error))
   };
+
+
 
   addProduct = (name,price,image) =>{
 
@@ -44,23 +48,30 @@ export default class App extends Component {
     .catch(error => console.log(error)) 
   };
 
+
+
+
   saveProduct (product)  {
     this.setState({storeProduct: product})
 
-  }
+  };
 
 
-  editProductMethod = (id,name,price,image) => {
+
+
+
+  editProductMethod = (product_id,name,price,image) => {
 
     let editProduct = {productName: name, price: price, image: image}
 
-    axios.put(`/api/product/${id}`, editProduct)
+    axios.put(`/api/product/${product_id}`, editProduct)
     .then(res => {this.setState({inventory: res.data})})
     .catch(error => console.log(error))
 
   };
 
 
+  
 
   deleteProduct = (id) => {
     axios.delete(`/api/product/${id}`)
@@ -73,7 +84,7 @@ export default class App extends Component {
 
   render() {
 
-    // console.log(this.state.storeEdit)
+    // console.log(this.state.storeProduct)
 
     return (
       <div>

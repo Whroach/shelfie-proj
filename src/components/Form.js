@@ -10,10 +10,11 @@ export default class Form extends Component {
             imageInput: "",
             nameInput: "",
             priceInput: 0,
-            toggleForm: true
+            toggleForm: false
             
         }
     };
+
 
     componentDidUpdate = (prevProps,prevState) =>{
         if(prevProps.storeProduct !== this.props.storeProduct){
@@ -24,7 +25,8 @@ export default class Form extends Component {
 
     toggleForm = () => {
         this.setState({toggleForm: !this.state.toggleForm})
-      }
+      };
+
 
     handleImageChange = (value) => {
         this.setState({imageInput: value})
@@ -55,6 +57,10 @@ export default class Form extends Component {
 
     };
 
+    submitChanges = (product_id) => {
+        this.props.editProductFn(product_id,this.state.nameInput, this.state.priceInput, this.state.imageInput)
+    }
+
 
 
 
@@ -64,7 +70,7 @@ export default class Form extends Component {
         // displayEditForm.addEventListener("click", this.updateProduct)
         // const [...storeProduct ] = [this.props]
 
-        const {product_name, price, image} = this.props.storeProduct
+        const {product_id, product_name, price, image} = this.props.storeProduct
 
         // console.log(product_name, price)
 
@@ -77,8 +83,8 @@ export default class Form extends Component {
                         <p>Image URL:</p><input placeholder = {image} value ={this.state.imageInput} onChange={element => this.handleImageChange(element.target.value)}></input>
                         <p>Product Name:</p><input placeholder = {product_name} value ={this.state.nameInput} onChange={element => this.handleNameChange(element.target.value)}></input>
                         <p>Price:</p><input placeholder = {price} value={this.state.priceInput} onChange={element => this.handlePriceChange(element.target.value)}></input>
-                        <button onClick={() => this.clearInputs()}>Cancel</button>
-                        <button onClick={() => this.submitInputs()}>Save Changes</button>
+                        <button onClick={() => this.toggleForm()}>Cancel</button>
+                        <button onClick={() => this.submitChanges(product_id)}>Save Changes</button>
                     </form>
                 </div>
                 )
