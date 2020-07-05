@@ -12,9 +12,11 @@ export default class App extends Component {
 
     this.state = {
       inventory: [],
-      storeId: []
+      storeProduct: []
 
     }
+
+    this.saveProduct = this.saveProduct.bind(this)
   };
 
   componentDidMount = () => {
@@ -42,8 +44,13 @@ export default class App extends Component {
     .catch(error => console.log(error)) 
   };
 
+  saveProduct (product)  {
+    this.setState({storeProduct: product})
 
-  editProduct = (id,name,price,image) => {
+  }
+
+
+  editProductMethod = (id,name,price,image) => {
 
     let editProduct = {productName: name, price: price, image: image}
 
@@ -52,6 +59,8 @@ export default class App extends Component {
     .catch(error => console.log(error))
 
   };
+
+
 
   deleteProduct = (id) => {
     axios.delete(`/api/product/${id}`)
@@ -64,13 +73,14 @@ export default class App extends Component {
 
   render() {
 
+    // console.log(this.state.storeEdit)
 
     return (
       <div>
         <div>
           <Header/>
-          <Dashboard inventory={this.state.inventory} deleteFn={this.deleteProduct}/>
-          <Form addProductFn={this.addProduct} editProductFn={this.editProduct} storeId={this.state.storeId}/>
+          <Dashboard inventory={this.state.inventory} deleteFn={this.deleteProduct} saveProductFn={this.saveProduct} />
+          <Form addProductFn={this.addProduct} storeProduct={this.state.storeProduct} editProductFn={this.editProductMethod}/>
         </div>
       </div>
     )

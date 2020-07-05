@@ -1,24 +1,30 @@
 import React, { Component } from 'react'
 
 export default class Form extends Component {
+
+    
     constructor(props){
         super(props)
-
-
+        
         this.state = {
             imageInput: "",
             nameInput: "",
             priceInput: 0,
-            editForm: this.props.storeId
+            toggleForm: true
             
         }
     };
 
-    componentDidMount = () =>{
-        // const displayEditForm = document.getElementById("editForm")
-        // displayEditForm.addEventListener("click", this.updateProduct)
+    componentDidUpdate = (prevProps,prevState) =>{
+        if(prevProps.storeProduct !== this.props.storeProduct){
+            this.toggleForm()
+        }
 
     }
+
+    toggleForm = () => {
+        this.setState({toggleForm: !this.state.toggleForm})
+      }
 
     handleImageChange = (value) => {
         this.setState({imageInput: value})
@@ -49,27 +55,28 @@ export default class Form extends Component {
 
     };
 
-    updateProduct = () => {
-        this.setState({updateForm: true})
 
-    }
 
 
 
     render() {
         // const displayEditForm = document.getElementById("editForm")
         // displayEditForm.addEventListener("click", this.updateProduct)
-        console.log(this.state.editForm)
+        // const [...storeProduct ] = [this.props]
+
+        const {product_name, price, image} = this.props.storeProduct
+
+        // console.log(product_name, price)
 
         return (
             <div>
-                {this.state.updateForm
+                {this.state.toggleForm
                 ? (
                  <div>
                     <form>
-                        <p>Image URL:</p><input value ={this.state.imageInput} onChange={element => this.handleImageChange(element.target.value)}></input>
-                        <p>Product Name:</p><input value ={this.state.nameInput} onChange={element => this.handleNameChange(element.target.value)}></input>
-                        <p>Price:</p><input value={this.state.priceInput} onChange={element => this.handlePriceChange(element.target.value)}></input>
+                        <p>Image URL:</p><input placeholder = {image} value ={this.state.imageInput} onChange={element => this.handleImageChange(element.target.value)}></input>
+                        <p>Product Name:</p><input placeholder = {product_name} value ={this.state.nameInput} onChange={element => this.handleNameChange(element.target.value)}></input>
+                        <p>Price:</p><input placeholder = {price} value={this.state.priceInput} onChange={element => this.handlePriceChange(element.target.value)}></input>
                         <button onClick={() => this.clearInputs()}>Cancel</button>
                         <button onClick={() => this.submitInputs()}>Save Changes</button>
                     </form>

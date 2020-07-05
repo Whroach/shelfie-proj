@@ -8,7 +8,7 @@ export default function Product(props) {
             <div>
                 <p>{props.value.product_name}</p>
                 <p>{props.value.price}</p>
-                <button id = "editForm">Edit</button>
+                <button onClick={() => props.saveProductFn(props.value)}>Edit</button>
                 <button onClick={() => props.deleteFn(props.value.product_id)}>Delete</button>
             </div>
 
