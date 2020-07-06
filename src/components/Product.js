@@ -1,4 +1,5 @@
 import React from 'react'
+// import { Link } from 'react-router-dom'
 
 export default function Product(props) {
 
@@ -11,8 +12,6 @@ export default function Product(props) {
                 <button onClick={() => props.saveProductFn(props.value)}>Edit</button>
                 <button onClick={() => props.deleteFn(props.value.product_id)}>Delete</button>
             </div>
-
-
             
         </div>
     )
