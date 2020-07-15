@@ -48,6 +48,21 @@ module.exports = {
         .then(() => res.sendStatus(200))
         .catch(error => console.log(error))
 
+    },
+
+    getProduct: (req,res) =>{
+        const { id } = req.params
+        // parseInt(id)
+        const db = req.app.get('db')
+        console.log(id)
+
+
+         db.get_product(id)
+
+        .then(product => {
+            res.status(200).send(product)
+        })
+        .catch(() => console.log('Here is the error'))
     }
 
 

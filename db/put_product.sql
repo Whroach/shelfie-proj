@@ -1,5 +1,5 @@
 UPDATE products 
-SET product_name = ${productName}, price = ${price}, image = ${image}
-WHERE product_id = ${id}
+SET name = ${productName}, price = ${price}, img = ${image}
+WHERE id = ${id}
 
   

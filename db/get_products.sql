@@ -1,1 +1,1 @@
-SELECT * FROM products
+SELECT id, name, price, img FROM products

@@ -1,2 +1,2 @@
-INSERT INTO products (product_name, price, image)
+INSERT INTO products (name, price, img)
 VALUES ( ${productName}, ${price}, ${image} );

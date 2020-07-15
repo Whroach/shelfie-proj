@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
+import axios from 'axios'
+import {Link} from 'react-router-dom'
 
 export default class Form extends Component {
-
-    
     constructor(props){
         super(props)
         
@@ -10,92 +10,108 @@ export default class Form extends Component {
             imageInput: "",
             nameInput: "",
             priceInput: 0,
-            toggleForm: false
+            toggleForm: false,
+            storeProduct: {}
             
         }
     };
 
+    componentDidMount = () =>{
+        const location = this.props.location
+        const  { params }= this.props.match
+        const id = parseInt(params.id)
 
-    componentDidUpdate = (prevProps,prevState) =>{
-        if(prevProps.storeProduct !== this.props.storeProduct){
-            this.toggleForm()
+        if(location.pathname !== '/add-product'){
+            axios.get(`/api/product/${id}`)
+            .then( res => 
+                this.setState({
+                    toggleForm: true,
+                    storeProduct: res.data[0]
+
+                })
+                )
+            .catch(() => console.log('axios error in Form'))
+
         }
 
+
+    
     }
+
+
 
     toggleForm = () => {
         this.setState({toggleForm: !this.state.toggleForm})
       };
 
 
-    handleImageChange = (value) => {
-        this.setState({imageInput: value})
 
-
-    };
-
-    handleNameChange = (value) => {
-        this.setState({nameInput: value})
-
-    };
-
-    handlePriceChange = (value) =>{
-        this.setState({priceInput: value})
-
-    };
+    handleInput =(event) =>{
+        this.setState({[event.target.name]: event.target.value})
+    }
 
     clearInputs = () =>{
         this.setState({imageInput: "", nameInput: "", priceInput: ""})
 
     };
 
-    //if invoked, this method will invoke the addProductFn from parent componet to add users inputs to our db
-    submitInputs = () => {
 
-        this.props.addProductFn(this.state.nameInput, this.state.priceInput, this.state.imageInput)
+    addProduct = () =>{
+        const { imageInput, nameInput, priceInput } = this.state
+    
+        let newProduct = {productName: nameInput, price: priceInput, image: imageInput}
+    
+    
+        axios.post('/api/product', newProduct)
+        .then( () => console.log('success!!!'))
+        .catch(error => console.log(error)) 
+      };
+    
+    
+      
+      editProductMethod = (id,name,price,image) => {
 
-
-    };
-
-    submitChanges = (product_id) => {
-        this.props.editProductFn(product_id,this.state.nameInput, this.state.priceInput, this.state.imageInput)
-    }
-
+            let editProduct = {productName: name, price: price, image: image}
+        
+            axios.put(`/api/product/${id}`, editProduct)
+            .then(res => {this.setState({inventory: res.data})})
+            .catch(error => console.log(error))
+        }
 
 
 
 
     render() {
-        // const displayEditForm = document.getElementById("editForm")
-        // displayEditForm.addEventListener("click", this.updateProduct)
-        // const [...storeProduct ] = [this.props]
 
-        const {product_id, product_name, price, image} = this.props.storeProduct
+        // console.log(this.props)
 
-        // console.log(product_name, price)
+        console.log(this.state.storeProduct)
+
+        const {id, name, price, image} = this.state.storeProduct
+
 
         return (
             <div className = "form"> 
                 {this.state.toggleForm
                 ? (
                  <div>
-                    <form>
-                        <p>Image URL:</p><input placeholder = {image} value ={this.state.imageInput} onChange={element => this.handleImageChange(element.target.value)}></input>
-                        <p>Product Name:</p><input placeholder = {product_name} value ={this.state.nameInput} onChange={element => this.handleNameChange(element.target.value)}></input>
-                        <p>Price:</p><input placeholder = {price} value={this.state.priceInput} onChange={element => this.handlePriceChange(element.target.value)}></input>
+                    <form >
+                        <p>Image URL:</p><input placeholder = {image} value ={this.state.imageInput} name='imageInput' onChange={(element) => this.handleInput(element)}></input>
+                        <p>Product Name:</p><input placeholder = {name} value ={this.state.nameInput} name='nameInput' onChange={(element) => this.handleInput(element)}></input>
+                        <p>Price:</p><input placeholder = {price} value={this.state.priceInput} name='priceInput' onChange={(element) => this.handleInput(element)}></input>
                         <button onClick={() => this.toggleForm()}>Cancel</button>
-                        <button onClick={() => this.submitChanges(product_id)}>Save Changes</button>
+                        <button onClick={() => this.editProductMethod(id)}>Save Changes</button>
                     </form>
                 </div>
                 )
                 :
                 <div>
-                    <form>
-                        <p>Image URL:</p><input value ={this.state.imageInput} onChange={element => this.handleImageChange(element.target.value)}></input>
-                        <p>Product Name:</p><input value ={this.state.nameInput} onChange={element => this.handleNameChange(element.target.value)}></input>
-                        <p>Price:</p><input value={this.state.priceInput} onChange={element => this.handlePriceChange(element.target.value)}></input>
+                    <form >
+                        <p>Image URL:</p><input value ={this.state.imageInput} name='imageInput' onChange={(element) => this.handleInput(element)}></input>
+                        <p>Product Name:</p><input value ={this.state.nameInput} name='nameInput' onChange={(element) => this.handleInput(element)}></input>
+                        <p>Price:</p><input value={this.state.priceInput} name='priceInput' onChange={(element) => this.handleInput(element)}></input>
                         <button onClick={() => this.clearInputs()}>Cancel</button>
-                        <button onClick={() => this.submitInputs()}>Add Inventory</button>
+                        <Link to={'/'}><button onClick={() => this.addProduct()}>Add Inventory</button></Link>
                     </form>
                 </div>
                  }                
@@ -110,144 +126,3 @@ export default class Form extends Component {
 
 
 
-// import React, { Component } from 'react'
-// import axios from 'axios'
-
-
-// export default class Form extends Component {
-
-//     constructor(props){
-//         super(props)
-
-//         // if(editBttn){
-//         //     editBttn.addEventListener("click", () => this.toggleForm,false)
-//         // }
-        
-//         this.state = {
-//             imageInput: "",
-//             nameInput: "",
-//             priceInput: 0,
-//             toggleForm: false,
-//             storeProduct: []
-            
-//         }
-//     };
-
-
-//     componentDidMount = () =>{
-
-//         document.addEventListener("submit", this.handleEventListener)
-
-//       };
-
-
-//     handleEventListener = (event) => {
-//         var editButton = document.getElementById("editButton")
-
-//         if(editButton === document.getElementById("editButton")) {
-//             this.toggleForm() && this.displayAProduct()
-
-//         }
-
-//         event.preventDefault()
-//     };
-
-
-
-//     componentDidUpdate = (prevProps,prevState) =>{
-//         // if(prevState.storeProduct !== this.state.storeProduct){
-//         //     this.toggleForm()
-//         // }
-
-//     };
-
-
-//     displayAProduct = () => {
-//         axios.get(`/api/product/${this.props.match.params.id}`)
-//         .then(res => {
-//         this.setState({storeProduct: res.data}) 
-//         })
-    
-
-//     }
-
-//     toggleForm = () => {
-//         this.setState({toggleForm: !this.state.toggleForm})
-//       };
-
-
-//     handleImageChange = (value) => {
-//         this.setState({imageInput: value})
-
-
-//     };
-
-//     handleNameChange = (value) => {
-//         this.setState({nameInput: value})
-
-//     };
-
-//     handlePriceChange = (value) =>{
-//         this.setState({priceInput: value})
-
-//     };
-
-//     clearInputs = () =>{
-//         this.setState({imageInput: "", nameInput: "", priceInput: ""})
-
-//     };
-
-//     //if invoked, this method will invoke the addProductFn from parent componet to add users inputs to our db
-//     submitInputs = () => {
-
-//         this.props.addProductFn(this.state.nameInput, this.state.priceInput, this.state.imageInput)
-
-
-//     };
-
-//     submitChanges = (product_id) => {
-//         this.props.editProductFn(product_id,this.state.nameInput, this.state.priceInput, this.state.imageInput)
-//     }
-
-
-
-
-
-//     render() {
-//         // const displayEditForm = document.getElementById("editForm")
-//         // displayEditForm.addEventListener("click", this.updateProduct)
-//         // const [...storeProduct ] = [this.props]
-
-//         // const {product_id, product_name, price, image} = this.props.inventory
-
-//         // console.log(product_name, price)
-
-//         return (
-//             <div className = "form">
-//                 {this.state.toggleForm
-//                 ? (
-//                  <div>
-//                     <form>
-//                         <p>Image URL:</p><input value ={this.state.imageInput} onChange={element => this.handleImageChange(element.target.value)}></input>
-//                         <p>Product Name:</p><input value ={this.state.nameInput} onChange={element => this.handleNameChange(element.target.value)}></input>
-//                         <p>Price:</p><input value={this.state.priceInput} onChange={element => this.handlePriceChange(element.target.value)}></input>
-//                         <button className = "buttons" onClick={() => this.toggleForm()}>Cancel</button>
-//                         <button className = "buttons" onClick={() => this.submitChanges()}>Save Changes</button>
-//                     </form>
-//                 </div>
-//                 )
-//                 :
-//                 <div>
-//                     <form>
-//                         <p>Image URL:</p><input value ={this.state.imageInput} onChange={element => this.handleImageChange(element.target.value)}></input>
-//                         <p>Product Name:</p><input value ={this.state.nameInput} onChange={element => this.handleNameChange(element.target.value)}></input>
-//                         <p>Price:</p><input value={this.state.priceInput} onChange={element => this.handlePriceChange(element.target.value)}></input>
-//                         <button className = "buttons" onClick={() => this.clearInputs()}>Cancel</button>
-//                         <button className = "buttons" onClick={() => this.submitInputs()}>Add Inventory</button>
-//                     </form>
-//                 </div>
-//                  }                
-//             </div>
-//         )
-//     }
-// }

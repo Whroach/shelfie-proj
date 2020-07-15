@@ -6,16 +6,123 @@
   display: flex;
 }
 
-.form {
-  background-color:yellow;
-  display: flex;
-  justify-content: center;
-  margin: 15%
+#title{
+  position:relative;
+  left: 12%;
+  font-size: 30px;
+  bottom: 15px;
+
+}
+#logo{
+  position:relative;
+  left: 10%;
+  height: 50px;
+  top: 12px
+}
+
+.buttons-container {
+  width: 20%;
+  position: relative;
+  top: 30%;
+  left: 20%;
+  
+
 }
 
 .buttons {
+  height: 50%;
+  width: 35%;
+  color: rgb(0,0,0);
+  font-size: 18px;
+  font-weight: 700;
+  background-color: #ed6b5a;
+  border-color: rgb(0,0,0);
+  border-radius: 5px;
+
+}
+
+.form {
+  background-color: #3ad886;
+  height: 520px;
+  width: 350px;
+  border-radius: 7px;
   display: flex;
   justify-content: center;
-  margin: auto
+  margin: 10%;
+  font-size: 100%
+}
+
+#editb{
+  position: relative;
+  right: 20px;
+  height: 25%;
+  width: 150%;
+  background-color: lightgreen;
+
+}
+
+#deleteb{
+  height: 25%;
+  width: 25%;
+  background-color: lightgreen;
+}
+
+.inventory-details {
+  top: -5%;
+  height: 20%;
+  width: 50%;
+  position: relative;
+  right: 50%;
+  display: flex;
+  justify-content: space-around;
+  color: white;
+
+}
+
+.inventory-button{
+  height: 30%;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  
+}
+
+.inventory-container {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: -35%;
+
+
+  /* align-items: center; */
+  /* position: relative;
+  top: 20%;
+  left: 50%;
+  right: 50%;
+  display: flex; */
+
+}
+
+.current-inventory {
+  position: relative;
+  top: 10%;
+  height: 25%;
+  width: 25%;
+  display: flex;
+  background-color: darkred;
+}
+
+
+
+
+#image {
+  position: relative;
+  top: 20%;
+  left: 5%;
+  height:70%;
+  width: 55%
 
 }
